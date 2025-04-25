@@ -23,7 +23,7 @@ jobs:
           SOURCE_DIR: "./"
 
       - name: Invalidate Cloudflare cache
-        uses: nathanvaughn/actions-cloudflare-purge@v2
+        uses: nathanvaughn/actions-cloudflare-purge@v1
         with:
           zone: ${{ secrets.CF_ZONE_ID }}
           token: ${{ secrets.CF_API_TOKEN }}
