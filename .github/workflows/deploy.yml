@@ -11,19 +11,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Sync to S3
+      
+      - name: Sync files to S3
         uses: jakejarvis/s3-sync-action@master
         with:
-          args: --delete
+          args: --acl public-read --delete
         env:
-          AWS_S3_BUCKET: prjt-1.com
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: "./"
+          AWS_REGION: "ap-south-1"  # your region
+          SOURCE_DIR: "./"          # your folder
 
       - name: Purge Cloudflare Cache
-        uses: cloudflare/cache-action@v1
-        with:
-          zone-id: ${{ secrets.CF_ZONE_ID }}
-          api-token: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"purge_everything":true}'
