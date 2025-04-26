@@ -22,8 +22,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SOURCE_DIR: "./"
 
-      - name: Invalidate Cloudflare cache
-        uses: nathanvaughn/actions-cloudflare-purge@v1
+      - name: Purge Cloudflare Cache
+        uses: cloudflare/cache-action@v1
         with:
-          zone: ${{ secrets.CF_ZONE_ID }}
-          token: ${{ secrets.CF_API_TOKEN }}
+          zone-id: ${{ secrets.CF_ZONE_ID }}
+          api-token: ${{ secrets.CF_API_TOKEN }}
